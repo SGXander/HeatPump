@@ -642,9 +642,10 @@ int HeatPump::readPacket() {
           switch(data[0]) {
             case 0x02: { // setting information
               heatpumpSettings receivedSettings;
-              receivedSettings.power       = lookupByteMapValue(POWER_MAP, POWER, 2, data[3]);
-              receivedSettings.iSee = data[4] > 0x08 ? true : false;
-              receivedSettings.mode = lookupByteMapValue(MODE_MAP, MODE, 5, receivedSettings.iSee  ? (data[4] - 0x08) : data[4]);
+              receivedSettings.raw   = data
+              receivedSettings.power = lookupByteMapValue(POWER_MAP, POWER, 2, data[3]);
+              receivedSettings.iSee  = data[4] > 0x08 ? true : false;
+              receivedSettings.mode  = lookupByteMapValue(MODE_MAP, MODE, 5, receivedSettings.iSee  ? (data[4] - 0x08) : data[4]);
 
               if(data[11] != 0x00) {
                 int temp = data[11];
@@ -658,7 +659,7 @@ int HeatPump::readPacket() {
               receivedSettings.fan         = lookupByteMapValue(FAN_MAP, FAN, 6, data[6]);
               receivedSettings.vane        = lookupByteMapValue(VANE_MAP, VANE, 7, data[7]);
               receivedSettings.wideVane    = lookupByteMapValue(WIDEVANE_MAP, WIDEVANE, 7, data[10] & 0x0F);
-		      wideVaneAdj = (data[10] & 0xF0) == 0x80 ? true : false;
+		          wideVaneAdj = (data[10] & 0xF0) == 0x80 ? true : false;
               
               if(settingsChangedCallback && receivedSettings != currentSettings) {
                 currentSettings = receivedSettings;
