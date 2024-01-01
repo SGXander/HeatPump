@@ -46,6 +46,7 @@
 typedef uint8_t byte;
 
 struct heatpumpSettings {
+  const char[] raw;
   const char* power;
   const char* mode;
   float temperature;
